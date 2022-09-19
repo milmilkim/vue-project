@@ -1,17 +1,23 @@
 <template>
   <div>
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Msg" />
+    <!-- <HelloWorld msg="Hello, world!!" /> -->
+    <LifecycleTest />
+    <MyWatchers />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+// import HelloWorld from './components/HelloWorld.vue';
+import LifecycleTest from './components/LifecycleTest.vue';
+import MyWatchers from './components/MyWatchers.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    // HelloWorld,
+    LifecycleTest,
+    MyWatchers,
   },
 };
 </script>
