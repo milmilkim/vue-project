@@ -11,12 +11,19 @@ export default {
       awesome: true,
 
       newTodo: '',
+      hideCompleted: false,
       todos: [
-        { id: id++, text: 'Learn HTML' },
-        { id: id++, text: 'Learn JavaScript' },
-        { id: id++, text: 'Learn Vue' },
+        { id: id++, text: 'Learn HTML', done: true },
+        { id: id++, text: 'Learn JavaScript', done: true },
+        { id: id++, text: 'Learn Vue', done: false },
       ],
     };
+  },
+
+  computed: {
+    filteredTodos() {
+      return this.hideCompleted ? this.todos.filter((todo) => !todo.done) : this.todos;
+    },
   },
 
   methods: {
@@ -34,7 +41,7 @@ export default {
     },
 
     addTodo() {
-      this.todos.push({ id: id++, text: this.newTodo });
+      this.todos.push({ id: id++, text: this.newTodo, done: false });
       this.newTodo = '';
     },
 
@@ -64,21 +71,22 @@ export default {
     <h1 v-if="awesome">Vue is awesome!</h1>
     <h1 v-else>Oh, no...</h1>
 
-    <ul>
-      <li v-for="todo in todos" :key="todo.id">{{ todo.id }} + {{ todo.text }}</li>
-    </ul>
-
-    //양방향 바인딩
     <form @submit.prevent="addTodo">
       <input v-model="newTodo" placeholder="todo" />
       <button>Add Todo</button>
     </form>
+
     <ul>
-      <li v-for="todo in todos" :key="todo.id">
-        {{ todo.text }}
+      <li v-for="todo in filteredTodos" :key="todo.id">
+        <input type="checkbox" v-model="todo.done" />
+        <span :class="{ done: todo.done }"> {{ todo.text }}</span>
         <button @click="removeTodo(todo)">X</button>
       </li>
     </ul>
+
+    <button @click="hideCompleted = !hideCompleted">
+      {{ hideCompleted ? 'Show all' : 'Hide completed' }}
+    </button>
   </div>
 </template>
 
@@ -89,5 +97,9 @@ export default {
 
 .blue {
   color: blue;
+}
+
+.done {
+  text-decoration: line-through;
 }
 </style>
