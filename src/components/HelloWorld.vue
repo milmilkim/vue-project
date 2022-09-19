@@ -1,58 +1,93 @@
+<script>
+let id = 0;
+
+export default {
+  data() {
+    return {
+      titleClass: 'blue',
+      count: 0,
+      text: 'text',
+      text2: 'text2',
+      awesome: true,
+
+      newTodo: '',
+      todos: [
+        { id: id++, text: 'Learn HTML' },
+        { id: id++, text: 'Learn JavaScript' },
+        { id: id++, text: 'Learn Vue' },
+      ],
+    };
+  },
+
+  methods: {
+    handleClick() {
+      this.count++;
+    },
+
+    onInput(e) {
+      //v-on handler 인자(e)로 DOM event를 받을 수 있다
+      this.text = e.target.value;
+    },
+
+    toggle() {
+      this.awesome = !this.awesome;
+    },
+
+    addTodo() {
+      this.todos.push({ id: id++, text: this.newTodo });
+      this.newTodo = '';
+    },
+
+    removeTodo(task) {
+      this.todos = this.todos.filter((todo) => todo.id !== task.id);
+    },
+  },
+};
+</script>
+
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
+  <div>
+    <h1 :class="titleClass">Make me red</h1>
+    <button @click="handleClick">count is: {{ count }}</button>
+    <button @click="() => this.count++">count is: {{ count }}</button>
+
+    <input :value="text" @input="onInput" placeholder="Type here" />
+    <p>{{ text }}</p>
+
+    <input v-model="text2" placeholder="Type here" />
+    <p>{{ text2 }}</p>
+
+    <hr />
+
+    <button @click="toggle">toggle</button>
+
+    <h1 v-if="awesome">Vue is awesome!</h1>
+    <h1 v-else>Oh, no...</h1>
+
     <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
+      <li v-for="todo in todos" :key="todo.id">{{ todo.id }} + {{ todo.text }}</li>
     </ul>
-    <h3>Essential Links</h3>
+
+    //양방향 바인딩
+    <form @submit.prevent="addTodo">
+      <input v-model="newTodo" placeholder="todo" />
+      <button>Add Todo</button>
+    </form>
     <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+      <li v-for="todo in todos" :key="todo.id">
+        {{ todo.text }}
+        <button @click="removeTodo(todo)">X</button>
+      </li>
     </ul>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+<style>
+.red {
+  color: red;
 }
-</script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.blue {
+  color: blue;
 }
 </style>
